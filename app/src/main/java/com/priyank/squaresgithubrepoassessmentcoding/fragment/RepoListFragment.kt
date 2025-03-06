@@ -60,7 +60,9 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         }
     }
 
-    /*Get List from API and Add to Room DB*/
+    /*
+    * Get List from API and Add to Room DB
+    * */
     private fun setupRepoFromAPIToDB(){
         repoViewModel.getRepoList().observe(viewLifecycleOwner, Observer { repoList ->
 //            val arr = ArrayList<GithubRepos>()
@@ -72,6 +74,9 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         })
     }
 
+    /*
+    * Setup Recyclerview and Adapter by observing data from DB
+    * */
     private fun setupRepoRecyclerView(){
         repoAdapter = RepoAdapter()
         binding.rvRepoList.apply {

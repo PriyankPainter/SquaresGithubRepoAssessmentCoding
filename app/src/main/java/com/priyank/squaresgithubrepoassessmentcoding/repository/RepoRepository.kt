@@ -12,12 +12,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RepoRepository (var context : Context, private val db : RepoDatabase) {
+class RepoRepository (private var context : Context, private val db : RepoDatabase) {
 
-/*
-* fetch API response from API
-* */
-    val repoList = MutableLiveData<ArrayList<RepoModel>>()
+    /*
+    * fetch Response from API and Pass using LiveData
+    * */
+    private var repoList = MutableLiveData<ArrayList<RepoModel>>()
+
     fun getRepoList(): MutableLiveData<ArrayList<RepoModel>> {
 
         val call = RetrofitClient.getApiInterface().getRepositories()
@@ -38,9 +39,9 @@ class RepoRepository (var context : Context, private val db : RepoDatabase) {
 
 
 
-/*
-* Perform operations on Database
-* */
+    /*
+    * Perform operations on Database
+    * */
     suspend fun insertRepo(repos : GithubRepos) = db.getRepoDao().insertRepo(repos)
     suspend fun insertMultipleRepo(repoList : ArrayList<GithubRepos>) = db.getRepoDao().insertMultipleRepo(repoList)
 
