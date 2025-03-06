@@ -22,7 +22,7 @@ import kotlinx.coroutines.coroutineScope
 
 class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
 
-    private var repoListBinding : FragmentRepoListBinding? = null
+    private var repoListBinding: FragmentRepoListBinding? = null
     private val binding get() = repoListBinding!!
 
     private lateinit var repoViewModel: RepoViewModel
@@ -45,39 +45,50 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         setupRepoRecyclerView()
     }
 
-    private fun updateUI(repos : ArrayList<GithubRepos>){
-        if(repos != null){
-            if(repos.isNotEmpty()){
-                repoListBinding?.rvRepoList!!.visibility = View.VISIBLE
+    private fun updateUI(repos: ArrayList<GithubRepos>) {
+        if (repos.isNotEmpty()) {
+            repoListBinding?.rvRepoList!!.visibility = View.VISIBLE
 
-                for (data in repos){
-                    Log.e("REPO", "ID : ${data.id} \nTitle : ${data.repoName} \nDesc : ${data.repoDesc} ")
-                }
-
-            } else {
-                repoListBinding?.rvRepoList!!.visibility = View.GONE
+            for (data in repos) {
+                Log.e(
+                    "REPO",
+                    "ID : ${data.id} \nTitle : ${data.repoName} \nDesc : ${data.repoDesc} "
+                )
             }
+
+        } else {
+            repoListBinding?.rvRepoList!!.visibility = View.GONE
         }
     }
 
     /*
     * Get List from API and Add to Room DB
+    * if Database has no records available
     * */
-    private fun setupRepoFromAPIToDB(){
-        repoViewModel.getRepoList().observe(viewLifecycleOwner, Observer { repoList ->
+    private fun setupRepoFromAPIToDB() {
+        if(repoViewModel.getAllRepo().value!!.isEmpty()) {
+            repoViewModel.getRepoList().observe(viewLifecycleOwner, Observer { repoList ->
 //            val arr = ArrayList<GithubRepos>()
-            for (data in repoList){
+                for (data in repoList) {
 //                arr.add(GithubRepos(data.name!!, data.description!!, data.stargazersCount, data.isBookmark))
-                repoViewModel.addRepo(GithubRepos(data.name!!, data.description!!, data.stargazersCount, data.isBookmark))
-            }
+                    repoViewModel.addRepo(
+                        GithubRepos(
+                            data.name!!,
+                            data.description!!,
+                            data.stargazersCount,
+                            data.isBookmark
+                        )
+                    )
+                }
 //            repoViewModel.addMultipleRepo(arr)
-        })
+            })
+        }
     }
 
     /*
     * Setup Recyclerview and Adapter by observing data from DB
     * */
-    private fun setupRepoRecyclerView(){
+    private fun setupRepoRecyclerView() {
         repoAdapter = RepoAdapter()
         binding.rvRepoList.apply {
             layoutManager = LinearLayoutManager(this.context)
@@ -86,9 +97,10 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         }
 
         activity?.let {
-            repoViewModel.getAllRepo().observe(viewLifecycleOwner){ repoList ->
+            repoViewModel.getAllRepo().observe(viewLifecycleOwner) { repoList ->
                 repoAdapter.differ.submitList(repoList)
                 updateUI(repoList)
+                repoListBinding?.pb!!.visibility = View.GONE
             }
         }
     }

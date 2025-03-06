@@ -47,7 +47,6 @@ class RepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
         desc = currentRepo.repoDesc
         stars = currentRepo.repoStars
 
-
         repoDetailBinding!!.tvRepoName.setText(name)
         repoDetailBinding!!.tvRepoStars.setText("Stars : $stars")
         repoDetailBinding!!.tvRepoDesc.setText(desc)
@@ -77,6 +76,11 @@ class RepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
         }
     }
 
+    /*
+    * Add and Remove item to bookmark
+    * by setting TRUE or FALSE in Database
+    * to Show BookMark ImageAccordingly
+    * */
     fun addRemoveToBookmark(bookmarkValue : Boolean){
         val note = GithubRepos(name!!, desc!!, stars, bookmarkValue)
         repoViewModel.addBookmarkRepo(note)

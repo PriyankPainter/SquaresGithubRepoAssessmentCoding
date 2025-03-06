@@ -1,6 +1,7 @@
 package com.priyank.squaresgithubrepoassessmentcoding.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -45,6 +46,11 @@ class RepoAdapter : RecyclerView.Adapter<RepoAdapter.RepoViewHolder>() {
 
         holder.itemBinding.tvRepoName.text = currentRepo.repoName
         holder.itemBinding.tvRepoStars.text = "Stars : ${currentRepo.repoStars}"
+        if(currentRepo.isBookmark){
+            holder.itemBinding.ivBookmarkFilled.visibility = View.VISIBLE
+        } else {
+            holder.itemBinding.ivBookmarkFilled.visibility = View.GONE
+        }
 
         holder.itemView.setOnClickListener {
             val direction = RepoListFragmentDirections.actionRepoListFragmentToRepoDetailFragment(currentRepo)
