@@ -1,16 +1,20 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+//    id 'com.google.devtools.ksp'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
     namespace 'com.priyank.squaresgithubrepoassessmentcoding'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.priyank.squaresgithubrepoassessmentcoding"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -23,22 +27,77 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "mode"
+    productFlavors{
+        production{
+            resValue "string", "SERVER_URL", "https://api.github.com/"
+        }
+    }
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 }
 
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+
+    //---Scalable Density Point SDP helps to make design same for multiple device
+    implementation 'com.intuit.sdp:sdp-android:1.1.1'
+
+    //Navigation
+    def navVersion = "2.7.5"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
+    //--Retrofit
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //--OkHttp
+    def okhttp_version = "4.5.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+    //--RxJava, RxAndroid
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
+
+    //ROOM
+    def roomVersion = "2.6.1"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-common:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+//    kapt "androidx.room:room-compiler:$roomVersion"
+
+    //Coroutines
+    def coroutinesVersion = "1.10.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinVersion"
+
+    //LifeCycle arch
+    def lifecycleVersion = "2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
+
+    //Annotation Processor
+//    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 }

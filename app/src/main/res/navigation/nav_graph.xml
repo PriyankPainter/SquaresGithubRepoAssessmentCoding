@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/repoListFragment">
+
+    <fragment
+        android:id="@+id/repoListFragment"
+        android:name="com.priyank.squaresgithubrepoassessmentcoding.fragment.RepoListFragment"
+        android:label="RepoListFragment" >
+        <action
+            android:id="@+id/action_RepoListFragment_to_RepoDetailFragment"
+            app:destination="@id/repoDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/repoDetailFragment"
+        android:name="com.priyank.squaresgithubrepoassessmentcoding.fragment.RepoDetailFragment"
+        android:label="RepoDetailFragment" >
+        <action
+            android:id="@+id/action_RepoDetailFragment_to_RepoListFragment"
+            app:destination="@id/repoListFragment" />
+
+        <argument
+            android:name="github_repos"
+            app:argType="com.priyank.squaresgithubrepoassessmentcoding.database.GithubRepos"
+            app:nullable="true"/>
+    </fragment>
+</navigation>
