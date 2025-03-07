@@ -10,6 +10,6 @@ import retrofit2.http.Query
 interface ApiInterface {
 
     @GET("orgs/square/repos")
-    fun getRepositories(): Call<ArrayList<RepoModel>>
+    fun getRepositories(): Call<List<RepoModel>>
 
 }

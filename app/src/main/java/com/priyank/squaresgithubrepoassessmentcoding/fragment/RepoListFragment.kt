@@ -45,7 +45,7 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         setupRepoRecyclerView()
     }
 
-    private fun updateUI(repos: ArrayList<GithubRepos>) {
+    private fun updateUI(repos: List<GithubRepos>) {
         if (repos.isNotEmpty()) {
             repoListBinding?.rvRepoList!!.visibility = View.VISIBLE
 

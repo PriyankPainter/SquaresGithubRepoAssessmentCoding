@@ -1,4 +1,4 @@
-package com.example.kotlinapilistdemo.rxjava_sample.constants
+package com.priyank.squaresgithubrepoassessmentcoding.utility
 
 import android.app.Application
 import android.content.Context

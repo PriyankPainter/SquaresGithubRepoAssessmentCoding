@@ -12,11 +12,11 @@ import kotlinx.coroutines.launch
 
 class RepoViewModel(app : Application, private val repoRepository: RepoRepository) : AndroidViewModel(app) {
 
-    var repoLiveData: MutableLiveData<ArrayList<RepoModel>>? = null
+    var repoLiveData: MutableLiveData<List<RepoModel>>? = null
 
-    fun getRepoList(): LiveData<ArrayList<RepoModel>> {
+    fun getRepoList(): MutableLiveData<List<RepoModel>> {
         repoLiveData = repoRepository.getRepoList()
-        return repoLiveData as MutableLiveData<ArrayList<RepoModel>>
+        return repoLiveData as MutableLiveData<List<RepoModel>>
     }
 
 

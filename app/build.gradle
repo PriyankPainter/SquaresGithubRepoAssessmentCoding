@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-parcelize'
 //    id 'kotlin-kapt'
-//    id 'com.google.devtools.ksp'
+    id 'kotlin-parcelize'
+    id 'com.google.devtools.ksp'
     id 'androidx.navigation.safeargs'
 }
 
@@ -48,6 +48,10 @@ android {
     }
 }
 
+/*kotlin {
+    jvmToolchain(8)
+}*/
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
@@ -82,11 +86,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
 
     //ROOM
-    def roomVersion = "2.6.1"
+    def roomVersion = "2.5.0"
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-common:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    ksp "androidx.room:room-compiler:$roomVersion"
 
     //Coroutines
     def coroutinesVersion = "1.10.1"
@@ -100,5 +104,5 @@ dependencies {
 
     //Annotation Processor
     //noinspection LifecycleAnnotationProcessorWithJava8
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    ksp "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 }

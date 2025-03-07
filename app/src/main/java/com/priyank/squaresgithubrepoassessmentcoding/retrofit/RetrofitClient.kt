@@ -1,7 +1,6 @@
 package com.priyank.squaresgithubrepoassessmentcoding.retrofit
 
-import android.content.Context
-import com.example.kotlinapilistdemo.rxjava_sample.constants.AppConfig
+import com.priyank.squaresgithubrepoassessmentcoding.utility.AppConfig
 import com.priyank.squaresgithubrepoassessmentcoding.R
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
