@@ -1,5 +1,7 @@
 package com.priyank.squaresgithubrepoassessmentcoding.view
 
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider

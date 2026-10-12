@@ -1,7 +1,10 @@
 package com.priyank.squaresgithubrepoassessmentcoding.repository
 
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.priyank.squaresgithubrepoassessmentcoding.database.RepoDatabase
 import com.priyank.squaresgithubrepoassessmentcoding.database.GithubRepos
 import com.priyank.squaresgithubrepoassessmentcoding.model.RepoModel
@@ -9,6 +12,7 @@ import com.priyank.squaresgithubrepoassessmentcoding.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class RepoRepository (private val db : RepoDatabase) {
 
@@ -32,6 +36,22 @@ class RepoRepository (private val db : RepoDatabase) {
             }
         })
 
+        return repoList
+    }
+
+    /**
+     * Fetch data from local JSON file in assets folder
+     */
+    fun getRepoListFromAssets(assetManager: AssetManager): MutableLiveData<List<RepoModel>> {
+        val jsonString: String
+        try {
+            jsonString = assetManager.open("API_DATA.json").bufferedReader().use { it.readText() }
+            val listType = object : TypeToken<List<RepoModel>>() {}.type
+            val repos: List<RepoModel> = Gson().fromJson(jsonString, listType)
+            repoList.postValue(repos)
+        } catch (ioException: IOException) {
+            Log.e("REPO-->", ioException.message.toString())
+        }
         return repoList
     }
 

@@ -18,6 +18,11 @@ class RepoViewModel(app : Application, private val repoRepository: RepoRepositor
         return repoLiveData as MutableLiveData<List<RepoModel>>
     }
 
+    fun getRepoListFromAssets(): MutableLiveData<List<RepoModel>> {
+        repoLiveData = repoRepository.getRepoListFromAssets(getApplication<Application>().assets)
+        return repoLiveData as MutableLiveData<List<RepoModel>>
+    }
+
 
     fun addRepo(repos : GithubRepos) =
         viewModelScope.launch {

@@ -1,5 +1,9 @@
 package com.priyank.squaresgithubrepoassessmentcoding.fragment
 
+import android.content.Context
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,12 +18,15 @@ import com.priyank.squaresgithubrepoassessmentcoding.viewmodel.RepoViewModel
 import com.priyank.squaresgithubrepoassessmentcoding.view.MainActivity
 import com.priyank.squaresgithubrepoassessmentcoding.R
 import com.priyank.squaresgithubrepoassessmentcoding.databinding.FragmentRepoListBinding
+import com.priyank.squaresgithubrepoassessmentcoding.model.RepoModel
+import com.priyank.squaresgithubrepoassessmentcoding.utility.ConnectivityReceiver
 
 class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
 
     private var repoListBinding: FragmentRepoListBinding? = null
     private val binding get() = repoListBinding!!
 
+    private lateinit var connectivityReceiver: ConnectivityReceiver
     private lateinit var repoViewModel: RepoViewModel
     private lateinit var repoAdapter: RepoAdapter
 
@@ -39,22 +46,42 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
 
         setupRepoRecyclerView()
         setupRepoFromAPIToDB()
+//        setupRepoFromAssetsToDB()
+    }
+
+    fun isInternetConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun updateUI(repos: List<GithubRepos>) {
         if (repos.isNotEmpty()) {
             repoListBinding?.rvRepoList?.visibility = View.VISIBLE
             repoListBinding?.pb?.visibility = View.GONE
+            repoListBinding?.tvErrorMessage?.visibility = View.GONE
 
-            /*for (data in repos) {
-                Log.e(
-                    "REPO",
-                    "ID : ${data.repoId} \nTitle : ${data.repoName} \nDesc : ${data.repoDesc} "
-                )
-            }*/
         } else {
             // Optionally handle empty state
-            // repoListBinding?.rvRepoList?.visibility = View.GONE
+             repoListBinding?.rvRepoList?.visibility = View.GONE
+            repoListBinding?.pb?.visibility = View.GONE
+            repoListBinding?.tvErrorMessage?.visibility = View.VISIBLE
         }
     }
 
@@ -63,23 +90,54 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
     * if Database has no records available
     * */
     private fun setupRepoFromAPIToDB() {
-        repoViewModel.getRepoList().observe(viewLifecycleOwner, Observer { repoList ->
-            repoList?.let { list ->
-                val arr = ArrayList<GithubRepos>()
-                for (data in list) {
-                    val repoId = data.id
-                    val name = data.name ?: ""
-                    val description = data.description ?: ""
-                    val githubRepo = GithubRepos(repoId, name, description, data.stargazersCount, data.isBookmark)
-                    arr.add(githubRepo)
-                    Log.e("REPO-->", "Id : $repoId\nTitle : $name\nDesc : $description\nStar : ${data.stargazersCount}\nBookmark : ${data.isBookmark}")
-                    Log.e("REPO-->", "----------------------")
-                }
-                repoViewModel.addMultipleRepo(arr)
-
+        connectivityReceiver = ConnectivityReceiver { isOnline ->
+            if (isOnline) {
+                repoViewModel.getRepoList().observe(viewLifecycleOwner, Observer { repoList ->
+                    repoList?.let { list ->
+                        insertDataToDBAndFetchAll(list)
+                    }
+                })
+            } else {
                 getAllRepoData()
             }
+        }
+    }
+
+    /*
+    * Get List from Assets and Add to Room DB.
+    * if Database has no records available, tvErrorMessage TextView gets visible.
+    * */
+    private fun setupRepoFromAssetsToDB() {
+        repoViewModel.getRepoListFromAssets().observe(viewLifecycleOwner, Observer { repoList ->
+            repoList?.let { list ->
+                insertDataToDBAndFetchAll(list)
+            }
         })
+    }
+
+    fun insertDataToDBAndFetchAll(list: List<RepoModel>) {
+        val arr = ArrayList<GithubRepos>()
+        for (data in list) {
+            val repoId = data.id
+            val name = data.name ?: ""
+            val description = data.description ?: ""
+            val githubRepo = GithubRepos(
+                repoId,
+                name,
+                description,
+                data.stargazersCount,
+                data.isBookmark
+            )
+            arr.add(githubRepo)
+            Log.e(
+                "REPO from ASSETS-->",
+                "Id : $repoId\nTitle : $name\nDesc : $description\nStar : ${data.stargazersCount}\nBookmark : ${data.isBookmark}"
+            )
+            Log.e("REPO from ASSETS-->", "----------------------")
+        }
+        repoViewModel.addMultipleRepo(arr)
+
+        getAllRepoData()
     }
 
     /*
@@ -96,7 +154,7 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
         getAllRepoData()
     }
 
-    private fun getAllRepoData(){
+    private fun getAllRepoData() {
         // Pass all data from getAllRepo() into RepoAdapter()
 
         repoViewModel.getAllRepo().observe(viewLifecycleOwner) { repoList ->
@@ -106,6 +164,21 @@ class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
                 repoAdapter.submitList(ArrayList(repoList))
                 updateUI(repoList)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireActivity().registerReceiver(connectivityReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            requireActivity().unregisterReceiver(connectivityReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
         }
     }
 
