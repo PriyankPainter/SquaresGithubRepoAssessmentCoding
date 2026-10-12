@@ -22,6 +22,7 @@ class RepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
     private lateinit var repoViewModel: RepoViewModel
     private lateinit var repoDetailView : View
     private lateinit var currentRepo: GithubRepos
+    private var id:Int = 0
     private var name:String? = null
     private var desc:String? = null
     private var stars:Int = 0
@@ -43,6 +44,7 @@ class RepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
 
         currentRepo = args.githubRepos!!
 
+        id = currentRepo.repoId
         name = currentRepo.repoName
         desc = currentRepo.repoDesc
         stars = currentRepo.repoStars
@@ -82,8 +84,8 @@ class RepoDetailFragment : Fragment(R.layout.fragment_repo_detail) {
     * to Show BookMark ImageAccordingly
     * */
     fun addRemoveToBookmark(bookmarkValue : Boolean){
-        val note = GithubRepos(name!!, desc!!, stars, bookmarkValue)
-        repoViewModel.addBookmarkRepo(note)
+        val note = GithubRepos(id,name!!, desc!!, stars, bookmarkValue)
+//        repoViewModel.addBookmarkRepo(note)
 
         Toast.makeText(context, "Repository bookmarked successfully", Toast.LENGTH_LONG).show()
     }

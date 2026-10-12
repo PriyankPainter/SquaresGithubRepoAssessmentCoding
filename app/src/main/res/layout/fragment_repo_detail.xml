@@ -23,18 +23,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Repository"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
-                    android:textStyle="bold"
-                    android:text="Repository" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvRepoName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:textStyle="bold"
                     tools:text="Repository Name" />
 
@@ -65,8 +65,8 @@
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"
                     android:layout_centerInParent="true"
-                    android:visibility="gone"
                     android:src="@drawable/bookmark_filled"
+                    android:visibility="gone"
                     tools:ignore="ContentDescription" />
 
             </RelativeLayout>
@@ -76,24 +76,23 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:background="@color/greyLight"
-            android:layout_marginTop="@dimen/_15sdp"/>
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@color/greyLight" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvRepoStars"
             android:layout_marginTop="@dimen/_15sdp"
+            android:text="Description"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="@dimen/_15sdp"
-            android:text="Description" />
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/tvRepoDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvRepoStars"
             android:layout_marginTop="@dimen/_5sdp"
             android:textColor="@color/black"
             android:textSize="@dimen/_13sdp"

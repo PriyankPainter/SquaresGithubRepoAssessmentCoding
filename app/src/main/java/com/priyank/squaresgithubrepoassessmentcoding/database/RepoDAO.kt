@@ -1,7 +1,6 @@
 package com.priyank.squaresgithubrepoassessmentcoding.database
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -20,6 +19,6 @@ interface RepoDAO {
     @Update
     suspend fun updateRepo(repo : GithubRepos)
 
-    @Query("SELECT * FROM github_repos order by id desc")
-    fun getAllRepos() : MutableLiveData<List<GithubRepos>>
+    @Query("SELECT * FROM github_repos")// order by repoId desc
+    fun getAllRepos() : LiveData<List<GithubRepos>>
 }

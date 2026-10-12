@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-//    id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id 'com.google.devtools.ksp'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-kapt'
+//    id 'com.google.devtools.ksp'
+
 }
 
 android {
@@ -58,6 +59,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
+    
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
@@ -66,7 +68,7 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.1'
 
     //Navigation
-    def navVersion = "2.7.5"
+//    def navVersion = "2.5.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 
@@ -86,16 +88,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
 
     //ROOM
-    def roomVersion = "2.5.0"
+    def roomVersion = "2.6.1"
     implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-common:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
-    ksp "androidx.room:room-compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     //Coroutines
-    def coroutinesVersion = "1.10.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinVersion"
+    def coroutinesVersion = "1.7.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     //LifeCycle arch
     def lifecycleVersion = "2.6.2"
@@ -103,6 +104,5 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
 
     //Annotation Processor
-    //noinspection LifecycleAnnotationProcessorWithJava8
-    ksp "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.priyank.squaresgithubrepoassessmentcoding.R
 import com.priyank.squaresgithubrepoassessmentcoding.database.RepoDatabase
+import com.priyank.squaresgithubrepoassessmentcoding.databinding.ActivityMainBinding
 import com.priyank.squaresgithubrepoassessmentcoding.repository.RepoRepository
 import com.priyank.squaresgithubrepoassessmentcoding.viewmodel.RepoViewModel
 import com.priyank.squaresgithubrepoassessmentcoding.viewmodel.RepoViewModelFactory
@@ -12,10 +13,14 @@ import com.priyank.squaresgithubrepoassessmentcoding.viewmodel.RepoViewModelFact
 class MainActivity : AppCompatActivity() {
 
     lateinit var repoViewModel: RepoViewModel
+    var binding : ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(R.layout.activity_main)
+        setContentView(binding!!.root)
+        binding!!.fragmentContainerView
 
         setupViewModel()
 

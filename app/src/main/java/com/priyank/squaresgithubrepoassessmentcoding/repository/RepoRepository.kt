@@ -28,7 +28,7 @@ class RepoRepository (private val db : RepoDatabase) {
 
             override fun onFailure(call: Call<List<RepoModel>>, t: Throwable) {
 //                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
-                Log.e("REPO", t.message.toString())
+                Log.e("REPO-->", t.message.toString())
             }
         })
 

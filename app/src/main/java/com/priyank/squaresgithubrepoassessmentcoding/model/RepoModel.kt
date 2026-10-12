@@ -5,6 +5,12 @@ import com.google.gson.annotations.SerializedName
 
 class RepoModel {
 
+    @SerializedName("id")
+    @Expose
+    public var id: Int = 0
+        get() = field
+        set(value) { field = value }
+
     @SerializedName("name")
     @Expose
     public var name: String? = null
